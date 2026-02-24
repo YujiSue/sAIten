@@ -1,0 +1,8 @@
+
+function setTrigger() {
+
+}
+
+function resetTrigger() {
+    
+}
