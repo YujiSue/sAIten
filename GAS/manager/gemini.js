@@ -1,35 +1,21 @@
-/** 
- * API key setter 
- */
-function setApiKey() {
-    /** Get property */
-    const props = getProperty(spreadsheet.getSheetByName('property'));
 
-    /** Display prompt to enter user's API key */
-    const ui = SpreadsheetApp.getUi();
-    const res = ui.prompt(locale.msg.enter_ai_api_key[props.lang]);
-    if (res.getSelectedButton() === ui.Button.OK) {
-        /** Set key */
-        PropertiesService.getScriptProperties().setProperty("API_KEY", res.getResponseText().trim());
-    }
-}
 
 /** 
  * Use Gemini AI 
  */
-function askGemini(prompt, props) {
+function askGemini(prompt, pref, prop) {
+    // Get API key
     const apiKey = PropertiesService.getScriptProperties().getProperty('GEMINI_API_KEY');
     if (!apiKey) return {"status": STATUS_ERROR, "error" : "API key is not set. Please set the key first."};
+    
     // Gemini endpoint URL
-    // https://generativelanguage.googleapis.com/v1beta/models/
-    // gemini-2.5-flash
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${props.aimodel}:generateContent?key=${apiKey}`;
+    const url = `${pref.aimodel.replace('<model>', pref.aimodel)}?key=${apiKey}`;
     //
     let safetyOp = [];
-    if (props.perimit_harass) safetyOp.push({ "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE" });
-    if (props.perimit_hate) safetyOp.push({ "category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE" });
-    if (props.perimit_sexual) safetyOp.push({ "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE" });
-    if (props.perimit_danger) safetyOp.push({ "category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE" });
+    if (props.allow_harass) safetyOp.push({ "category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE" });
+    if (props.allow_hate) safetyOp.push({ "category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE" });
+    if (props.allow_sexual) safetyOp.push({ "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE" });
+    if (props.allow_danger) safetyOp.push({ "category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE" });
     // Make payload
     const payload = 0 < safetyOp.length ? 
                     {"contents": [{ "parts": [{ "text": prompt }] }], "safetySettings": safetyOp} :

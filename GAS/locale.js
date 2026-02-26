@@ -1,5 +1,5 @@
 const locale = {
-    
+    "gsetting": {"en":"General Settings", "ja":"基本設定"},
     "pending": {"en":"Pending","ja":"未"},
     "done": {"en":"Done","ja":"済"},
     "score:": {"en":"Score: ","ja":"評点："},

@@ -1,7 +1,8 @@
 /**
- * Scoring
+ * Grading
  */
-function scoring() {
+/** Call AI directly */
+function grading() {
     /** Get current sheet */
     const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
     const crtSheet = spreadsheet.getSheetByName('criteria');
@@ -100,6 +101,16 @@ function scoring() {
         }
     }
 }
+/** Call the grading app managed by admin. */
+function callGrading() {
+    
+    
+    // Summerize
 
+
+
+
+
+}
 
 

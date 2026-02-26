@@ -15,6 +15,20 @@ const STATUS_ERROR = 2;
 
 
 ///////////////////////////////////////////////////////////
+/** 
+ * API key setter 
+ */
+function setApiKey() {
+    /** Get property */
+    const prop = getProperty(spreadsheet.getSheetByName('property'));
+    /** Display prompt to enter user's API key */
+    const ui = SpreadsheetApp.getUi();
+    const res = ui.prompt(locale.msg.enter_ai_api_key[prop.lang]);
+    if (res.getSelectedButton() === ui.Button.OK) {
+        /** Set key */
+        PropertiesService.getScriptProperties().setProperty("API_KEY", res.getResponseText().trim());
+    }
+}
 
 /**
  * Enclose message by bracket
@@ -25,11 +39,12 @@ function enclose(msg, bracket="()") {
 /**
  * Get property
  */
-function getProperty(propSheet) {
+function getProperty(sheet) {
     /** Read properties */
     let prop = {};
-    for (let r = 0; r < propSheet.getLastRow(); r++) {
-        const row = propSheet.getRange(r + 1, 1, 1, propSheet.getLastColumn()).getValues()[0];
+    for (let r = 0; r < sheet.getLastRow(); r++) {
+        const row = sheet.getRange(r + 1, 1, 1, sheet.getLastColumn()).getValues()[0];
+        if (!row[pKeyCol] || row[pKeyCol] === '') continue;
         prop[row[pKeyCol]] = row[pValCol];
     }
     return prop;

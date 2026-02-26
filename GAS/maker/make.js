@@ -1,13 +1,27 @@
 //
-function manageTask() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
+function generateFiles() {
     /** */
-  const qsheet = ss.getSheetByName('問題設定用');
-  const usheet = ss.getSheetByName('生成済URL');
+    const spreadsheets = SpreadsheetApp.getActiveSpreadsheet();
+    /** */
+    const props = loadSettings(spreadsheets);
+  
+    /** */
+    const qsheet = spreadsheets.getSheetByName(localed(props.locale, 'qsheet', props.lang));
+    if (!qsheet) makeQSheet(props);
+    const usheet = spreadsheets.getSheetByName(localed(props.locale, 'usheet', props.lang));
+    if (!usheet) makeUSheet(props);
+    
+    /**  */
+    const qValues = qsheet.getRange().getValues();
+    for (row of qValues) {
+        
+    }
 
-  /* */
-  const stateColIdx = 1;
-  const outDirIdx = 2;
+
+
+    /* */
+    const stateColIdx = 1;
+    const outDirIdx = 2;
   const authorColIdx = 3;
   const contactColIdx = 4;
   const titleColIdx = 5;
@@ -98,15 +112,17 @@ function copyTemplate(info, dirID) {
   return copied;
 }
 //
-function makeQuestions(info, form) {
-  for (let q = 0; q < info['count']; q++) {
-    form.addParagraphTextItem()
-      .setTitle(`[Q.${q+1}] ${info['question'][q]['text']}`)
-      .setRequired(true);
-  }
+/** Create an assignment form */
+function createForm(qinfo, form) {
+    for ([i, q] of  qinfo) {
+        form.addParagraphTextItem()
+            .setTitle(`[Q.${i+1}] ${q.text}`)
+            .setRequired(q.required);
+    }
 }
-//
-function prepareAnsSheet(info, ss) {
+
+/**  */
+function createSummary(info, ss) {
   const names = ss.getSheets().map(s => s.getName());
   for (name of names) {
     const sheet = ss.getSheetByName(name);

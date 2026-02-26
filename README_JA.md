@@ -160,9 +160,10 @@ sequenceDiagram
     autonumber
     participant Google as Google
     actor KeyAdmin as 情報システム課
-    actor AcAffairs as 課題管理者
-    participant Manager as 課題管理シート
+    actor AcAffairs as 管理者
+    participant Manager as 管理用シート
     actor Teacher as 教員
+    participant Maker as 課題作成シート
     participant Score as 集計シート
     participant Form as 課題フォーム
     actor Student as 学生
