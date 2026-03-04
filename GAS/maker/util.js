@@ -90,16 +90,6 @@ function addQestionColumns(sheet, current, num, props) {
         sheet.getRange(qSubheaderRow + 1, col + qqRequiredCol + 1).setDataValidation(qRequiredRule);
     }
 }
-function setHelpText() {
-  const sheet = SpreadsheetApp.getActiveSheet();
-  const rule = SpreadsheetApp.newDataValidation()
-    .requireTextIsNotEmpty()
-    .setHelpText("ここに氏名を入力してください")
-    .build();
-
-  sheet.getRange("A1").setDataValidation(rule);
-}
-
 /** Expand input fields */
 function addQestionRow(sheet, props) {
     // Add new row
