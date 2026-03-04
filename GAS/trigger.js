@@ -1,8 +1,0 @@
-
-function setTrigger() {
-
-}
-
-function resetTrigger() {
-    
-}

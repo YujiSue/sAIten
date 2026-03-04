@@ -1,12 +1,13 @@
-# AIScoring
+![header](./img/header.png)
+
+# sAIten
 Templates and scripts for creating and administering AI-assessable quizzes for educational use
+
 
 
 # Requirement
 * Google account
 * Gemini AI API Key
-If you are using
-If your 
 
 
 # Usage
