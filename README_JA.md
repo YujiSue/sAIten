@@ -97,7 +97,7 @@ sequenceDiagram
 
     Note over Author, Form: 【作問フェーズ】
     Author->>Main: 設問と評価基準の記入
-    Main->>Score: 集計シートの生成
+    Main->>Score: 集計シートの生成（初回は認証あり）
     Main->>Form: フォームの生成
 
     Note over Author, Form: 【確認フェーズ】
@@ -107,10 +107,12 @@ sequenceDiagram
     Note over Author,Gemini : 【実行フェーズ】
     Author->>Student: フォームURLの通知
     Student->>Form: 回答を送信
-    Form->>Score: 回答を収集
-    Score->>Gemini: 回答と評価基準を送信
-    Gemini->>Score: 採点結果（評点・コメント）を返却
-    Score->>Student: 採点結果の自動送信
+    Form->>Main: 回答を収集
+    Main->>Score: 回答の記録
+    Main->>Gemini: 回答と評価基準を送信
+    Gemini->>Main: 採点結果（評点・コメント）を返却
+    Main->>Score: 採点結果の記録
+    Main->>Student: 採点結果の送信
 
     Student-->>Author: 採点結果についての質問
     Author-->>Student: 質問への回答...
