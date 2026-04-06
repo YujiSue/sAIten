@@ -52,12 +52,12 @@
     組織単位でAI APIキーの取得などを行い、問題の作成は分業化する形式です。  
 
 ## 📊 公開中のテンプレート
-  * [課題作成シート テンプレート]()
-  * [課題管理シート テンプレート]()
+  * [課題作成シート テンプレート](https://docs.google.com/spreadsheets/d/1HzHftDrNk1_RiJVKzL4v2Rl-15715G4tJR1QiIQIaF4/edit?usp=drive_link)
+  * [課題管理シート テンプレート](https://docs.google.com/spreadsheets/d/1I5U5_LKV8lbb1WyVi4qWmPTQ6niUAGgHhenHdrndjsI/edit?usp=drive_link)
 
 ## 🧑‍🏫 個人で利用する場合
 ### 1. 課題作成シートの準備  
-  * [課題作成シート テンプレート]()を開いて自分のGoogleDriveにコピーする  
+  * [課題作成シート テンプレート](https://docs.google.com/spreadsheets/d/1HzHftDrNk1_RiJVKzL4v2Rl-15715G4tJR1QiIQIaF4/edit?usp=drive_link)を開いて自分のGoogleDriveにコピーする  
 
 ### 2. 認証とAPIキーの設定
   * 画面上部メニューから「sAIten」>「設定」>「認証」を選ぶ  
@@ -101,7 +101,7 @@
 
 ## 🏫 組織として運用
 ### 1. 課題管理シートの準備
-  * [課題管理シート テンプレート]()を開いて自分のGoogleDriveにコピーする  
+  * [課題管理シート テンプレート](https://docs.google.com/spreadsheets/d/1I5U5_LKV8lbb1WyVi4qWmPTQ6niUAGgHhenHdrndjsI/edit?usp=drive_link)を開いて自分のGoogleDriveにコピーする  
 
 ### 2. APIキーの設定
   * 組織単位でAPI keyを共有する場合:  

@@ -197,7 +197,7 @@
                 <ul class="sub-menu">
                     <li><a href="#regkey">Gemini API Keyの設定</a></li>
                     <li><a href="#instructor">教員情報の追加</a></li>
-                    <li><a href="#share-main">課題作成シートの生成と共有</a></li>
+                    <li><a href="#share">課題作成シートの生成と共有</a></li>
                 </ul>
             </li>
             <li>
@@ -253,8 +253,8 @@
                         個人で運用する場合は、<span style="color: crimson; font-weight: bold;">【課題作成シート】</span>を、組織運用の場合は<span style="color: crimson; font-weight: bold;">【課題管理シート】</span>を使用します。
                     <table border="1">
                         <tr><th>テンプレート名</th><th>リンク</th></tr>
-                        <tr><td>課題作成シート</td><td><a href="" target="_blank">こちら</a></td></tr>
-                        <tr><td>課題管理シート</td><td><a href="" target="_blank">こちら</a></td></tr>
+                        <tr><td>課題作成シート</td><td><a href="https://docs.google.com/spreadsheets/d/1HzHftDrNk1_RiJVKzL4v2Rl-15715G4tJR1QiIQIaF4/edit?usp=drive_link" target="_blank">こちら</a></td></tr>
+                        <tr><td>課題管理シート</td><td><a href="https://docs.google.com/spreadsheets/d/1I5U5_LKV8lbb1WyVi4qWmPTQ6niUAGgHhenHdrndjsI/edit?usp=drive_link" target="_blank">こちら</a></td></tr>
                     </table>
                     </p>
                     <p>
@@ -301,8 +301,7 @@
                         １度だけGemini AIにテストプロンプトが送られて、利用可能なキーであるかどうかチェックが入ります。<br/>
                         利用可能なキーであることが確認できれば、右下に「認証成功」の通知が表示されます。<br/>
                         4. 認証<br/><br/>
-                        ※初回は表示までに時間がかかることがあります。<brA>
-
+                        ※初回は表示までに時間がかかることがあります。<br/>
 
                     </p>
                 </div>
@@ -310,13 +309,49 @@
         </section>
 
         <section id="manage" class="content-panel">
-            <h1 class="parent-title">How to Use</h1>
+            <h1 class="parent-title">組織運用時のセットアップ</h1>
 
-            <div id="filter" class="sub-section">
-                <h2 class="sub-title"></h2>
+            <div id="regkey" class="sub-section">
+                <h2 class="sub-title">Gemini API Keyの設定</h2>
                 <div class="sub-content">
-                    <p></p>
-                    </div>
+                    <p>
+                        画面上部のメニューから「sAIten」>「設定」>「APIキーの登録」を選択してください。<br/>
+                        認証を完了していない場合、先に認証を要求されるので、画面の指示にしたがって認証処理をしてください。<br/>
+                        表示される画面にキーをペーストして「OK」を選んでください。<br/>
+                        テスト用のプロンプトが送られます。キーが問題なく利用可能であれば、右下に通知が出ます<br/>
+                        
+
+
+                    </p>
+                </div>
+            </div>
+            <div id="instructor" class="sub-section">
+                <h2 class="sub-title">教員情報の追加</h2>
+                <div class="sub-content">
+                    <p>左から順に<br/>
+                        課題作成者ID（職員番号など）<br/>
+                        グループ（科目、学年など）<br/>
+                        氏名<br/>
+                        メールアドレス<br/>
+                        を入力してください。
+                    </p>
+                    <p>
+                        グループは、後で集計したときに成績をまとめやすいよう、科目や学年などで分けるためのタグです。<br/>
+                        メールアドレスは、Googleアカウント（Google DocsやDriveにアクセス可能な権限をもつもの）を設定してください。<br/>
+                    </p>
+                </div>
+            </div>
+            <div id="share" class="sub-section">
+                <h2 class="sub-title">課題作成シートの生成と共有</h2>
+                <div class="sub-content">
+                    <p>
+                        教員情報を追加したら、画面上部のメニューから「sAIten」>「課題作成シートの生成」を選択してください。<br/>
+
+                        《課題作成シート》欄にIDが記入されたら、ファイルの生成が完了しています。<br/>
+                        《状態》欄が『済』の場合、教員と共有が完了しています。<br/>
+                        共有時に教員のメールアカウント宛に、通知が自動で送られるので、管理者はあらためて通知する必要はありません。<br/>
+                    </p>
+                </div>
             </div>
         </section>
 
@@ -363,9 +398,36 @@
         </section>
 
         <section id="settings" class="content-panel">
-            <h1 class="parent-title"></h1>
+            <h1 class="parent-title">ユーザ設定</h1>
 
-            <div id="filter" class="sub-section">
+            <div id="target" class="sub-section">
+                <h2 class="sub-title">デフォルト設定と課題別設定</h2>
+                <div class="sub-content">
+                    <p>
+
+
+                    </p>
+                </div>
+            </div>
+            <div id="general" class="sub-section">
+                <h2 class="sub-title">一般設定</h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+            <div id="response" class="sub-section">
+                <h2 class="sub-title">回答設定</h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+            <div id="target" class="sub-section">
+                <h2 class="sub-title"></h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+            <div id="target" class="sub-section">
                 <h2 class="sub-title"></h2>
                 <div class="sub-content">
                     <p></p>
@@ -375,21 +437,40 @@
 
         <section id="faq" class="content-panel">
             <h1 class="parent-title">FAQ</h1>
-            <div id="" class="sub-section">
-                <h2 class="sub-title"></h2>
+            <div id="about-q" class="sub-section">
+                <h2 class="sub-title">問題の作成について</h2>
                 <div class="sub-content">
-                    <p></p>
+                    <p>
+                        AIが正確な解答を生成しやすいケース。<br/>
+                    </p>
+                    <ul>
+                        <li>一般的な知識を問う内容（例：歴史上の出来事、科学的な原理など）</li>
+                        <li>シンプルな推論の積み重ねで答えが導ける内容（例：職種や場面を問わない汎用トラブルへの、適切な対応を問うなど）</li>
+                        <li>明確な正答が存在する内容（例：特定の事実を問う問題など）</li>
+                    </ul>
+                    <p>
+                        AIが苦手なケース。<br/>
+                    </p>
+                    <ul>
+                        <li>専門的すぎる内容（特に、一般にはあまり知られていないような内容）</li>
+                        <li>地域特異性の高い内容（日本固有の法令、限定的な地方の慣習など）</li>
+                        <li>新設または改訂されたばかりの情報</li>
+                        <li>正答がない倫理的な問題</li>
+                        など
+                    </ul>
                 </div>
             </div>
-            <div id="" class="sub-section">
-                <h2 class="sub-title"></h2>
+            <div id="about-c" class="sub-section">
+                <h2 class="sub-title">評価基準の設定について</h2>
                 <div class="sub-content">
-                    <p></p>
-                </div>
-            </div>
-        </section>
+                    <p>
 
-        
+
+                    </p>
+                </div>
+            </div>
+
+        </section>
     </main>
 </div>
 <script>
