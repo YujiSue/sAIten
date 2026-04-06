@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ヘルプセンター | sAIten</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --bg-color: #f8fafc;
+            --sidebar-width: 260px;
+            --header-height: 140px;
+        }
+
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ヘッダーエリア */
+        header {
+            background: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .header-banner {
+            display: inline-block;
+            width: 100%;
+            max-width: 800px;
+            height: 160px;
+            background: #ddd url('../img/header.png') center/cover;
+            border-radius: 8px;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            min-height: calc(100vh - 140px);
+        }
+
+        nav {
+            width: var(--sidebar-width);
+            background: #fff;
+            padding: 30px 20px;
+            border-right: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        nav ul { list-style: none; padding: 0; }
+        nav li { margin-bottom: 10px; }
+        nav a {
+            text-decoration: none;
+            color: #475569;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        nav a:hover { background: #f1f5f9; color: var(--primary-color); }
+        /* 親メニューのスタイル */
+.nav-item {
+    cursor: pointer;
+}
+
+/* サブメニューのコンテナ（初期状態は非表示） */
+.sub-menu {
+    list-style: none;
+    padding-left: 20px; /* インデントをつけて親子関係を明確に */
+    margin: 5px 0 10px 0;
+    display: none; /* JavaScriptで制御 */
+}
+
+/* サブメニューが開いている時のスタイル */
+.nav-item.active + .sub-menu {
+    display: block;
+}
+
+/* 親メニューの右側に矢印アイコンをつける（擬似要素） */
+.has-child::after {
+    content: ' ▶';
+    font-size: 0.7rem;
+    float: right;
+    transition: transform 0.3s;
+}
+
+.has-child.active::after {
+    transform: rotate(90deg); /* 開いた時に下向きにする */
+}
+
+/* サブメニュー内のリンクデザイン */
+.sub-menu a {
+    font-size: 0.9rem;
+    color: #64748b;
+    padding: 6px 10px;
+}
+
+        /* メインコンテンツ */
+        main {
+            flex: 1;
+            padding: 40px;
+            background: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+
+            nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 999;
+                transform: translateX(-100%);
+                box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            }
+
+            nav.open {
+                transform: translateX(0);
+            }
+
+            main { padding: 20px; }
+            
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 998;
+            }
+            .overlay.show { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="menu-toggle" id="menuBtn">☰</button>
+<div class="overlay" id="overlay"></div>
+
+<header>
+    <a href="#" class="header-banner"></a>
+</header>
+
+<div class="container">
+<nav id="sidebar">
+    <h3 style="margin-top:0;">HELP MENU</h3>
+    <ul>
+        <li>
+            <a href="javascript:void(0)" class="nav-item has-child">基本操作</a>
+            <ul class="sub-menu">
+                <li><a href="#setup">初期設定</a></li>
+                <li><a href="#import">データの取り込み</a></li>
+                <li><a href="#export">書き出し方法</a></li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="javascript:void(0)" class="nav-item has-child">高度な機能</a>
+            <ul class="sub-menu">
+                <li><a href="#filter">フィルタリング</a></li>
+                <li><a href="#batch">一括処理</a></li>
+                <li><a href="#api">外部連携</a></li>
+            </ul>
+        </li>
+
+        <li><a href="#faq">よくある質問</a></li>
+    </ul>
+</nav>
+    <main>
+        <h1 id="section1">クイックスタート</h1>
+        <p>ここでは、インストール直後に最初に行うべき設定について説明します。</p>
+        <div style="height: 800px; background: #f9f9f9; border: 1px dashed #ccc; margin-top: 20px; padding: 20px;">
+            (コンテンツが長く続いても、スマホではメニューが隠れているので読みやすいです)
+        </div>
+    </main>
+</div>
+
+<script>
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function toggleMenu() {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('show');
+        menuBtn.textContent = sidebar.classList.contains('open') ? '✕' : '☰';
+    }
+
+    menuBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+
+    const navLinks = document.querySelectorAll('nav a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) toggleMenu();
+        });
+    });
+    // サブメニューの開閉制御
+const parentMenus = document.querySelectorAll('.has-child');
+
+parentMenus.forEach(menu => {
+    menu.addEventListener('click', function() {
+        // クリックされたメニューの active クラスを切り替え
+        this.classList.toggle('active');
+        
+        // 次の要素（sub-menu）を表示・非表示
+        const subMenu = this.nextElementSibling;
+        if (subMenu.style.display === "block") {
+            subMenu.style.display = "none";
+        } else {
+            subMenu.style.display = "block";
+        }
+    });
+});
+</script>
+
+</body>
+</html>
