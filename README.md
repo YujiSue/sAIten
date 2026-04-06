@@ -26,7 +26,7 @@ This system makes it easy to monitor daily learning progress by requiring studen
   * Control number of submission attempts and deadlines / availability period
 
 ## 📚 Documentation
-### Detailed configuration options and usage are provided via [sAIten Help]()  
+### Detailed configuration options and usage are provided via [sAIten Help](https://yujisue.github.io/sAIten/)  
 
 ## 🔑 Requirement
   * Google account\*  
