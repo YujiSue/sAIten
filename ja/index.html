@@ -138,7 +138,55 @@
 
         .step-item { display: flex; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
         .step-img { max-width: 300px; border-radius: 8px; border: 1px solid #ddd; }
-        
+        .modal {
+            display: none; /* 初期は非表示 */
+            position: fixed;
+            z-index: 2000; /* 最前面に表示 */
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* 画像が画面より大きい場合はスクロール */
+            background-color: rgba(0,0,0,0.9); /* 真っ黒ではなく少し透過 */
+            cursor: zoom-out; /* クリックで閉じられることを示すカーソル */
+        }
+
+        /* モーダル内の画像 */
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%; /* 画面幅の90%まで */
+            /* 原寸大表示のため、max-heightは指定しないか、十分大きく取る */
+            animation: zoomIn 0.3s ease; /* ふわっと拡大するアニメーション */
+        }
+
+        @keyframes zoomIn {
+            from {transform: scale(0.7); opacity: 0;}
+            to {transform: scale(1); opacity: 1;}
+        }
+
+        /* 閉じるボタン（✕） */
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .close-modal:hover { color: #bbb; }
+
+        /* ヘルプ内の画像に対する設定（クリック可能であることを示す） */
+        .step-img, .content-panel img {
+            cursor: zoom-in;
+            transition: opacity 0.3s;
+        }
+        .step-img:hover, .content-panel img:hover {
+            opacity: 0.8; /* ホバー時に少し薄くする */
+        }
         /* Responsive */
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
@@ -176,9 +224,12 @@
 <div class="overlay" id="overlay"></div>
 
 <header>
-    <a href="https://github.com/YujiSue/sAIten" class="header-banner" target="_blank"></a>
+    <a href="https://github.com/YujiSue/sAIten/blob/main/README_JA.md" class="header-banner" target="_blank"></a>
 </header>
-
+<div id="imageModal" class="modal">
+    <span class="close-modal" id="closeModal">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
 <div class="container">
     <nav id="sidebar">
         <h3 style="margin-top:0;">ヘルプメニュー</h3>
@@ -258,12 +309,15 @@
                     </table>
                     </p>
                     <p>
-                        リンク先を開いたら、上部のメニューから「ファイル」→「コピーを作成」を選択して、テンプレートのコピーを自分のGoogleドライブに保存してください。<br/>
+                        リンク先を開いたら、上部のメニューから「ファイル」>「コピーを作成」を選択して、テンプレートのコピーを自分のGoogleドライブに保存してください。<br/>
                     </p>
-                        <img src="../img/copy_template.png" alt="テンプレートのコピー方法" class="step-img"/>
+                    <img src="../img/copy_template.png" alt="テンプレートのコピー方法" class="step-img"/>
                     <p>
-                        GoogleDriveに専用のフォルダを作成してコピーすると、後で生成されるファイルの管理が容易になります。    
+                        GoogleDriveに専用のフォルダを作成してコピーすると、後で生成されるファイルの管理が容易になります。<br/> 
+                        コピー時に『フォルダ』の下にあるボタンをクリックすると、コピー先のフォルダを指定できます。<br/>
                     </p>
+                    <img src="../img/select_folder.png" alt="コピー先の指定方法" class="step-img"/>
+                
                 </div>
             </div>
             
@@ -272,13 +326,18 @@
                 <div class="sub-content">
                     <p>
                         sAItenはGemini APIを使用してAIによる採点を行います。そのため、事前にGemini API Keyを取得する必要があります。<br/>
-                        API Keyの取得手順は以下の通りです。<br/>
-                        1. <a href="https://ai.google.dev/" target="_blank">Google AI Studio</a>にアクセスします。<br/>
-                        2. 「API Key」タブを選択し、新しいAPI Keyを作成します。<br/>
-                        3. 作成したAPI Keyをコピーして、保管してください。<br/><br/>
-                        ※ API Keyは無償で取得できますが、無償版にはかなり厳しい使用制限があるため、必要に応じて有償版の利用も検討してください。<br/>
+                        API Keyの取得手順は以下の通りです。
+                    </p>
+                    <ol>
+                        <li><a href="https://ai.google.dev/" target="_blank">Google AI Studio</a>にアクセスします。</li>
+                        <li>「API Key」タブを選択し、新しいAPI Keyを作成します。</li>
+                        <li>作成したAPI Keyをコピーして、保管してください。</li>
+                    </ol>
+                    <img src="../img/get_api_key.png" alt="API Keyの取得方法" class="step-img"/>
+                    <p>
+                        API Keyは無償で取得できますが、無償版にはかなり厳しい使用制限があるため、必要に応じて有償版の利用も検討してください。<br/>
                         支払い情報を入力したGoogle Projectとリンクさせる（Tier1）と、ストレスなく利用できると思います。<br/>
-                        詳しくは<a href="" target="_blank">こちら</a>をご参照ください。<br/>
+                        詳しくは<a href="https://ai.google.dev/gemini-api/docs/billing" target="_blank">こちら</a>をご参照ください。<br/><br/>
                         個人アカウントの場合は無料利用枠があるので、有償版を利用したとしても、実質無償で利用できる可能性が高いです。<br/><br/>
                         ※組織運用の場合、関わる教員数、学生数などに応じて、複数のキーを取得・管理が必要になることがあります。
                     </p>
@@ -293,13 +352,17 @@
                         ※将来的にGoogleの承認を得てアドイン化することも検討していますが、現状は個々のアカウントでGoogle Apps Scriptを実行していただく必要があるための制約です。<br/>
                     </p>
                     <p>
-                        認証の手順は以下の通りです。<br/>
-                        1. 各テンプレートファイルを開いて数秒待つ(※)と、画面上部に「sAIten」というメニュー項目が現れます<br/>
-                        2. 「sAIten」>「設定」>「認証」を選択してください<br/>
-                        3. 個人運用で【課題作成シート】を使用している場合、認証と同時にGemini API Keyの入力を求められます。<br/>
-                        取得したAPI Keyを入力して、先に進んでください。<br/>
-                        １度だけGemini AIにテストプロンプトが送られて、利用可能なキーであるかどうかチェックが入ります。<br/>
-                        利用可能なキーであることが確認できれば、右下に「認証成功」の通知が表示されます。<br/>
+                        認証の手順は以下の通りです。
+                    </p>
+                    <ol>
+                        <li>テンプレートからコピーしたファイルを開いて数秒待つ(※)と、画面上部に「sAIten」というメニュー項目が現れます。</li>
+                        <li>画面上部の「sAIten」メニューから「設定」>「認証」を選択してください。</li>
+
+                        <li>個人運用で【課題作成シート】を使用している場合、認証と同時にGemini API Keyの入力を求められます。<br/>
+                            取得したAPI Keyを入力して、先に進んでください。<br/>
+                            １度だけGemini AIにテストプロンプトが送られて、利用可能なキーであるかどうかチェックが入ります。<br/>
+                            利用可能なキーであることが確認できれば、右下に の通知が表示されます。</li>
+                    </ol>
                         4. 認証<br/><br/>
                         ※初回は表示までに時間がかかることがあります。<br/>
 
@@ -328,14 +391,13 @@
             <div id="instructor" class="sub-section">
                 <h2 class="sub-title">教員情報の追加</h2>
                 <div class="sub-content">
-                    <p>左から順に<br/>
-                        課題作成者ID（職員番号など）<br/>
-                        グループ（科目、学年など）<br/>
-                        氏名<br/>
-                        メールアドレス<br/>
-                        を入力してください。
+                    <p>左から順に以下の情報を入力してください。
+                        <table border="1">
+                            <tr><th>課題作成者ID</th><th>グループ</th><th>氏名</th><th>メールアドレス</th></tr>
+                        </table>
                     </p>
                     <p>
+                        課題作成者IDは、職員番号などのユニークなIDを設定してください。<br/>
                         グループは、後で集計したときに成績をまとめやすいよう、科目や学年などで分けるためのタグです。<br/>
                         メールアドレスは、Googleアカウント（Google DocsやDriveにアクセス可能な権限をもつもの）を設定してください。<br/>
                     </p>
@@ -356,10 +418,34 @@
         </section>
 
         <section id="make" class="content-panel">
-            <h1 class="parent-title"></h1>
+            <h1 class="parent-title">問題の作成</h1>
 
-            <div id="filter" class="sub-section">
-                <h2 class="sub-title"></h2>
+            <div id="question" class="sub-section">
+                <h2 class="sub-title">課題作成シートへの入力</h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+            <div id="generate" class="sub-section">
+                <h2 class="sub-title">回答用フォームと集計シートの生成</h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+            <div id="generated" class="sub-section">
+                <h2 class="sub-title">生成されたファイルの確認</h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+            <div id="refine" class="sub-section">
+                <h2 class="sub-title">設問文の修正と画像の追加</h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+            <div id="edit" class="sub-section">
+                <h2 class="sub-title">評価基準の編集</h2>
                 <div class="sub-content">
                     <p></p>
                     </div>
@@ -418,21 +504,36 @@
             <div id="response" class="sub-section">
                 <h2 class="sub-title">回答設定</h2>
                 <div class="sub-content">
-                    <p></p>
+                    <p>
+
+                    </p>
                     </div>
             </div>
-            <div id="target" class="sub-section">
-                <h2 class="sub-title"></h2>
+            <div id="ai" class="sub-section">
+                <h2 class="sub-title">AIの設定</h2>
                 <div class="sub-content">
                     <p></p>
                     </div>
             </div>
-            <div id="target" class="sub-section">
-                <h2 class="sub-title"></h2>
+            <div id="grading" class="sub-section">
+                <h2 class="sub-title">採点に関する設定</h2>
                 <div class="sub-content">
                     <p></p>
                     </div>
             </div>
+            <div id="notification" class="sub-section">
+                <h2 class="sub-title">結果通知に関する設定</h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+            <div id="admin" class="sub-section">
+                <h2 class="sub-title">管理者用設定</h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+
         </section>
 
         <section id="faq" class="content-panel">
@@ -506,6 +607,34 @@
             }
             
         });
+    });
+
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
+    const closeBtn = document.getElementById("closeModal");
+
+    const images = document.querySelectorAll('main img');
+
+    images.forEach(img => {
+        img.addEventListener('click', function() {
+            modal.style.display = "block";
+            modalImg.src = this.src;
+            if (modalImg.naturalWidth < window.innerWidth) {
+                modalImg.style.width = 'auto'; 
+            } else {
+                modalImg.style.width = '100%';
+            }
+        });
+    });
+
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = "none";
+    });
+
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal || e.target === modalImg) {
+            modal.style.display = "none";
+        }
     });
 </script>
 </body>
