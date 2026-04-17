@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    :root {
+      --primary-color: #1a73e8;
+      --border-color: #dadce0;
+      --bg-color: #f8f9fa;
+    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; color: #3c4043; }
+    
+    /* Selectors */
+    .scope-selector { margin-bottom: 20px; padding: 15px; background: var(--bg-color); border-radius: 8px; }
+    select, input[type="text"] { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box; }
+
+    /* Tabs */
+    .tabs { display: flex; border-bottom: 1px solid var(--border-color); margin-bottom: 15px; overflow-x: auto; }
+    .tab-link { padding: 10px 20px; cursor: pointer; border: none; background: none; outline: none; transition: 0.3s; border-bottom: 2px solid transparent; white-space: nowrap; }
+    .tab-link:hover { background-color: lightgray; }
+    .tab-link.active { color: var(--primary-color); border-bottom: 2px solid var(--primary-color); font-weight: bold; background-color: lightgray; }
+    .tab-content { display: none; padding: 10px 0; animation: fadeIn 0.3s; }
+    .tab-content.active { display: block; }
+
+    /* Containers */
+    .advanced-toggle-container {
+      margin: 10px 0;
+      padding: 10px;
+      background: #e8f0fe;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* Advanced */
+    .advanced-item {
+      background-color: #fafafa;
+      border-left: 3px solid #1a73e8;
+      padding-left: 10px;
+    }
+    .is-hidden { display: none !important; }
+
+    /* Form Items */
+    .form-item { margin-bottom: 15px; }
+    .form-item label { display: block; margin-bottom: 5px; font-size: 0.9rem; font-weight: 500; }
+    .checkbox-group { display: flex; align-items: center; gap: 10px; }
+    .checkbox-group input { width: auto; }
+
+    /* Buttons */
+    .footer { position: fixed; bottom: 0; left: 0; right: 0; padding: 15px 20px; background: white; border-top: 1px solid var(--border-color); text-align: right; }
+    button.main { background-color: var(--primary-color); color: white; border: none; padding: 8px 24px; border-radius: 4px; cursor: pointer; margin-left: 10px; }
+    button.secondary { background-color: white; border: 1px solid var(--border-color); padding: 8px 24px; border-radius: 4px; cursor: pointer; }
+    button:hover { opacity: 0.9; }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  </style>
+</head>
+<body>
+
+  <div class="scope-selector">
+    <label id='target'></label>
+    <select id="scopeSelect" onchange="loadPreference()">
+      <? sheets.forEach(record => { ?>
+        <option value="<?= record.value ?>"><?= record.label ?></option>
+      <? }) ?>
+    </select>
+  </div>
+
+  <div id="tabContainer" class="tabs"></div>
+  <div id="settingsContainer" style="margin-bottom: 80px;"></div>
+
+  <div class="footer">
+    <button id="cancel-btn" class="secondary" onclick="google.script.host.close()"></button>
+    <button id="save-btn" class="main" onclick="saveSettings()"></button>
+  </div>
+
+  <script>
+    let tabs = [];
+    let prefs = {};
+    let loc = {}; 
+
+    window.onload = function() {
+        google.script.run.withSuccessHandler(initialize).getPrefData();
+    };
+
+    function initialize(data) {
+        tabs = data.tabs;
+        prefs = data.prefs;
+        loc = data.loc;
+        renderPanes(prefs['_default_']);
+        openTab(null);
+        document.getElementById('target').innerText = translate(loc, 'pref.target');
+        document.getElementById('cancel-btn').textContent = translate(loc, 'cancel');
+        document.getElementById('save-btn').textContent = translate(loc, 'save');
+    }
+
+    function loadPreference() {
+        const scope = document.getElementById('scopeSelect').value;
+        if (!(scope in prefs)) prefs[scope] = JSON.parse(JSON.stringify(prefs["_default_"]));
+        showPref(prefs[scope]);
+    }
+
+    function renderPanes(pref) {
+        const tabContainer = document.getElementById('tabContainer');
+        const settingsContainer = document.getElementById('settingsContainer');
+        tabs.forEach(tab => {
+            /* Make Tab header */
+            const tabHeader = document.createElement('button');
+            tabHeader.className = "tab-link";
+            tabHeader.id = tab;
+            tabHeader.textContent = translate(loc, `pref.${tab}`);
+            tabHeader.onclick = (e) => openTab(e.currentTarget.id);
+            tabContainer.appendChild(tabHeader);
+
+            /* Make Content */
+            const contentPane = document.createElement('div');
+            contentPane.className = "tab-content";
+            contentPane.id = `pref.${tab}`;
+            settingsContainer.appendChild(contentPane);
+            pref[tab].content.forEach(key => {
+                contentPane.appendChild(createFormItem(key, pref[key]));
+            });
+        });
+    }
+
+    function createFormItem(key, item) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'form-item';
+        
+        const label = document.createElement('label');
+        label.textContent = translate(loc, key);
+        wrapper.appendChild(label);
+
+        if (item.type === 'select') {
+            const sel = document.createElement('select');
+            sel.name = key;
+            item.options.forEach(opt => {
+              const o = document.createElement('option');
+              o.value = opt;
+              o.textContent = translate(loc, opt);
+              if (opt === item.value) o.selected = true;
+              sel.appendChild(o);
+            });
+            sel.addEventListener('change', (e) => {
+              handleValueChange(key, e.target.value);
+            });
+            wrapper.appendChild(sel);
+        } 
+        else if (item.type === 'checkbox') {
+            wrapper.className += ' checkbox-group';
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.name = key;
+            cb.checked = item.value === true || item.value === "true";
+            cb.addEventListener('change', (e) => {
+              handleValueChange(key, e.target.checked);
+            });
+            wrapper.insertBefore(cb, label);
+        } 
+        else if (item.type === 'date') {
+            const inp = document.createElement('input');
+            inp.type = 'datetime-local';
+            inp.name = key;
+            inp.value = item.value;
+            inp.addEventListener('change', (e) => {
+                handleValueChange(key, e.target.value);
+            });
+            wrapper.appendChild(inp);
+        }
+        else {
+            const inp = document.createElement('input');
+            inp.type = 'text';
+            inp.name = key;
+            inp.value = item.value || '';
+            inp.addEventListener('change', (e) => {
+                handleValueChange(key, e.target.value);
+            });
+            wrapper.appendChild(inp);
+        }
+        return wrapper;
+    }
+
+    function openTab(target) {
+        const contents = document.getElementsByClassName("tab-content");
+        for (let content of contents) content.style.display = "none";
+        const headers = document.getElementById('tabContainer').children;
+        for (let header of headers) header.className = header.className.replace(" active", "");
+        if (target) {
+            document.getElementById(target).className += " active";
+            document.getElementById(`pref.${target}`).style.display = "block";
+        }
+        else {
+            headers[0].className += " active";
+            document.getElementById(`pref.${headers[0].id}`).style.display = "block";
+        }
+    }
+
+    function showPref(pref) {
+        const inputs = document.querySelectorAll('#settingsContainer input, #settingsContainer select');
+        inputs.forEach(input => {
+            const info = pref[input.name];
+            if (info.type === 'select') {
+              const opts = input.children;
+              for (const opt of opts) {
+                  if (opt.value === info.value) opt.selected = true;
+                  else opt.selected = false;
+              }
+            }
+            else if (info.type === 'checkbox') input.checked = info.value;
+            else input.value = info.value;
+        });
+    }
+
+    function handleValueChange(key, newValue) {
+        const scope = document.getElementById('scopeSelect').value;
+        const data = prefs[scope][key];
+        prefs[scope][key].value = data.type === 'number' ? Number(newValue) : newValue;
+    }
+
+    function translate(loc, key) {
+        if (key in loc) return loc[key];
+        else return key;
+    }
+
+    function saveSettings() {
+      google.script.run.withSuccessHandler(() => google.script.host.close()).updatePreference(prefs);
+    }
+  </script>
+</body>
+</html>
