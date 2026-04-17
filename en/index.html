@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center | sAIten</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --bg-color: #f8fafc;
+            --sidebar-width: 260px;
+            --header-height: 140px;
+        }
+
+        body {
+            font-family: sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .header-banner {
+            display: inline-block;
+            width: 100%;
+            max-width: 800px;
+            height: 160px;
+            background: #ddd url('../img/header.png') center/cover;
+            border-radius: 8px;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Navigater */
+        nav {
+            width: var(--sidebar-width);
+            background: #fff;
+            padding: 30px 20px;
+            border-right: 1px solid #e2e8f0;
+            transition: transform 0.3s ease;
+        }
+
+        nav ul { list-style: none; padding: 0; }
+        nav li { margin-bottom: 10px; }
+        nav a {
+            text-decoration: none;
+            color: #475569;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        nav a:hover { background: #f1f5f9; color: var(--primary-color); }
+
+        .nav-item {
+            cursor: pointer;
+        }
+
+        .sub-menu {
+            list-style: none;
+            padding-left: 20px;
+            margin: 5px 0 10px 0;
+            display: none;
+        }
+
+        .nav-item.active + .sub-menu {
+            display: block;
+        }
+
+        .has-child::after {
+            content: ' ▶';
+            font-size: 0.7rem;
+            float: right;
+            transition: transform 0.3s;
+        }
+
+        .has-child.active::after {
+            transform: rotate(90deg);
+        }
+
+        .sub-menu a {
+            font-size: 0.9rem;
+            color: #64748b;
+            padding: 6px 10px;
+        }
+
+        /* Main contents */
+        main {
+            flex: 1;
+            padding: 40px;
+            background: #fff;
+        }
+
+        .content-panel {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .content-panel.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-item { display: flex; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .step-img { max-width: 300px; border-radius: 8px; border: 1px solid #ddd; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+
+            nav {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 999;
+                transform: translateX(-100%);
+                box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            }
+
+            nav.open {
+                transform: translateX(0);
+            }
+
+            main { padding: 20px; }
+            
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 998;
+            }
+            .overlay.show { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+<button class="menu-toggle" id="menuBtn">☰</button>
+<div class="overlay" id="overlay"></div>
+
+<header>
+    <a href="https://github.com/YujiSue/sAIten" class="header-banner" target="_blank"></a>
+</header>
+
+<div class="container">
+    <nav id="sidebar">
+        <h3 style="margin-top:0;">HELP MENU</h3>
+        <ul>
+            <li>
+                <a href="javascript:void(0)" data-target="intro" class="nav-item has-child">Getting Started</a>
+                <ul class="sub-menu">
+                    <li><a href="#setup">Copy the Template</a></li>
+                    <li><a href="#auth">Authorization</a></li>
+                    <li><a href="#regkey">Add Your Gemini API Key</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0)" data-target="usage" class="nav-item has-child">How to Use</a>
+                <ul class="sub-menu">
+                    <li><a href="#manage">Organization Management</a></li>
+                    <li><a href="#generate">Create Assignment</a></li>
+                    <li><a href="#open"></a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0)" class="nav-item has-child">User Preference</a>
+                <ul class="sub-menu">
+                    <li><a href="#admin"></a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                </ul>
+            </li>
+            <li><a href="javascript:void(0)" data-target="faq" class="nav-item">FAQ</a></li>
+        </ul>
+    </nav>
+    <main id="content-area">
+        <section id="intro" class="content-panel active">
+            <h1 class="parent-title">Getting Started</h1>
+            <div id="setup" class="sub-section">
+                <h2 class="sub-title">Copy the Template</h2>
+                <div class="sub-content">
+                    <p></p>
+                </div>
+            </div>
+            <div id="auth" class="sub-section">
+                <h2 class="sub-title">Authorization</h2>
+                <div class="sub-content">
+                    <p></p>
+                </div>
+            </div>
+            <div id="regkey" class="sub-section">
+                <h2 class="sub-title"></h2>
+                <div class="sub-content">
+                    <p></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="usage" class="content-panel">
+            <h1 class="parent-title">How to Use</h1>
+
+            <div id="filter" class="sub-section">
+                <h2 class="sub-title"></h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+        </section>
+
+        <section id="advanced-ops" class="content-panel">
+            <h1 class="parent-title">User Preference</h1>
+
+            <div id="filter" class="sub-section">
+                <h2 class="sub-title"></h2>
+                <div class="sub-content">
+                    <p></p>
+                    </div>
+            </div>
+        </section>
+
+        <section id="faq" class="content-panel">
+            <h1 class="parent-title">FAQ</h1>
+            <div id="" class="sub-section">
+                <h2 class="sub-title"></h2>
+                <div class="sub-content">
+                    <p></p>
+                </div>
+            </div>
+            <div id="" class="sub-section">
+                <h2 class="sub-title"></h2>
+                <div class="sub-content">
+                    <p></p>
+                </div>
+            </div>
+        </section>
+
+        
+    </main>
+</div>
+<script>
+    const menuBtn = document.getElementById('menuBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    function toggleMenu() {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('show');
+        menuBtn.textContent = sidebar.classList.contains('open') ? '✕' : '☰';
+    }
+
+    menuBtn.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', toggleMenu);
+
+    const navLinks = document.querySelectorAll('.nav-item, .sub-link');
+    const panels = document.querySelectorAll('.content-panel');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            const targetId = link.getAttribute('data-target');
+            
+            // 全パネルを非表示にする
+            panels.forEach(panel => panel.classList.remove('active'));
+            // 対象パネルを表示する
+            document.getElementById(targetId).classList.add('active');
+
+            // 全リンクからactiveを除去し、クリックしたものに付与
+            if (link.classList.contains('active')) {
+                link.classList.remove('active');
+            }
+            else {
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            }
+            // 親メニューをクリックした時にサブメニューを開閉
+            if(link.classList.contains('has-child')) {
+                const sub = link.nextElementSibling;
+
+                /*
+                if (sub.style.display === "block") {
+                    sub.style.display = "none";
+                }  else {
+                    sub.style.display = "block";
+                }
+                */
+            }
+        });
+    });
+</script>
+</body>
+</html>
